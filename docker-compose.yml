@@ -2,7 +2,7 @@ version: "3"
 services:
   # DATABASE
   influxdb:
-    image: "influxdb:latest"
+    image: "influxdb:1.8.10"
     ports:
       - 8086:8086
     environment:
@@ -32,15 +32,53 @@ services:
       - "./packages/grafana/grafana.ini:/etc/grafana/grafana.ini"
     depends_on:
       - influxdb
+      - prometheus
 
   # lighthouse
-  webperf-dashboard-lighthouse:
-    image: "felicegeracitano/webperf-dashboard-lighthouse:1.1.1"
-    ports:
-      - 3000:3000
-    environment:
-      - HOST=influxdb
+#  webperf-dashboard-lighthouse:
+#    platform: linux/amd64
+#    build:
+#      dockerfile: ./Dockerfile
+#      context: ./packages/lighthouse
+#    #    image: "felicegeracitano/webperf-dashboard-lighthouse:1.1.1"
+#    ports:
+#      - 3000:3000
+#    environment:
+#      - HOST=influxdb
+#    volumes:
+#      - ./config.json:/usr/src/webperf-dashboard-lighthouse/config.json
+#    depends_on:
+#      - influxdb
+#      - prometheus
+
+
+  prometheus:
+    image: prom/prometheus:v2.17.1
     volumes:
-      - ./config.json:/usr/src/webperf-dashboard-lighthouse/config.json
-    depends_on:
-      - influxdb
+      - ./packages/prometheus:/etc/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    ports:
+      - 9090:9090
+    labels:
+      org.label-schema.group: "monitoring"
+
+  alertmanager:
+    image: prom/alertmanager:v0.20.0
+    volumes:
+      - ./packages/alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    ports:
+      - 9093:9093
+
+  pushgateway:
+    image: prom/pushgateway:v1.2.0
+    ports:
+      - 9091:9091

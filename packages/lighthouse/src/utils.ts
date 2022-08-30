@@ -27,12 +27,23 @@ const getMaxChildElementsCount = pipe(
 );
 
 const launchChromeAndRunLighthouse = async (url, config): Promise<ILighthouseRespose> => {
-  const chrome = await chromeLauncher.launch({
-    chromeFlags: ['--headless', '--no-zygote', '--no-sandbox']
-  });
-  const flags = { port: chrome.port, output: 'json' };
-  const result = await lighthouse(url, flags, config);
-  await chrome.kill();
+
+  const desktopConfig = require('lighthouse/lighthouse-core/config/lr-desktop-config.js');
+
+
+  // for production use
+  // const chrome = await chromeLauncher.launch({
+  //   chromeFlags: ['--headless', '--no-zygote', '--no-sandbox']
+  // });
+  // const flags = { port: chrome.port, output: 'json' };
+  // const result = await lighthouse(url, flags, desktopConfig);
+  // await chrome.kill();
+  // return result.lhr;
+
+  // for local run
+
+  const flags = { port: 9222, output: 'json',hostname: '127.0.0.1' , logLevel: 'error'};
+  const result = await lighthouse(url, flags, desktopConfig);
   return result.lhr;
 };
 

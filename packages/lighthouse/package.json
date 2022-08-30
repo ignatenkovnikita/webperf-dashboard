@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@octokit/rest": "16.3.2",
     "body-parser": "1.18.3",
     "chrome-launcher": "0.10.5",
     "cron": "1.6.0",
@@ -21,17 +22,17 @@
     "influx": "5.0.7",
     "lighthouse": "4.1.0",
     "node-fetch": "2.3.0",
+    "prom-client": "^14.1.0",
     "ramda": "0.26.1",
-    "serve-index": "1.9.1",
-    "@octokit/rest": "16.3.2"
+    "serve-index": "1.9.1"
   },
   "devDependencies": {
-    "colors": "1.3.3",
     "@types/cron": "1.3.0",
     "@types/express": "4.16.0",
     "@types/fs-extra": "^5.0.4",
     "@types/node": "10.12.15",
     "@types/serve-index": "^1.7.29",
+    "colors": "1.3.3",
     "nodemon": "^1.18.9",
     "prettier": "1.15.3",
     "ts-node": "^7.0.1",
