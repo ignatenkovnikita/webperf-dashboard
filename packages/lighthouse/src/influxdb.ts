@@ -37,7 +37,7 @@ export default {
 
     const Registry = client.Registry;
     const register = new Registry();
-    const gateway = new client.Pushgateway(process.env.PROMETHEUS || 'http://127.0.0.1:9091', [], register);
+    const gateway = new client.Pushgateway(process.env.PROMETHEUS || 'http://pushgateway:9091', [], register);
     const prefix = 'lighthouse';
 
     try {
