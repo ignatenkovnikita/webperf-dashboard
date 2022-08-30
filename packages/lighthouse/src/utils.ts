@@ -32,19 +32,18 @@ const launchChromeAndRunLighthouse = async (url, config): Promise<ILighthouseRes
 
 
   // for production use
-  // const chrome = await chromeLauncher.launch({
-  //   chromeFlags: ['--headless', '--no-zygote', '--no-sandbox']
-  // });
-  // const flags = { port: chrome.port, output: 'json' };
-  // const result = await lighthouse(url, flags, desktopConfig);
-  // await chrome.kill();
-  // return result.lhr;
+  const chrome = await chromeLauncher.launch({
+    chromeFlags: ['--headless', '--no-zygote', '--no-sandbox']
+  });
+  const flags = { port: chrome.port, output: 'json' };
+  const result = await lighthouse(url, flags, desktopConfig);
+  await chrome.kill();
+  return result.lhr;
 
   // for local run
-
-  const flags = { port: 9222, output: 'json',hostname: '127.0.0.1' , logLevel: 'error'};
-  const result = await lighthouse(url, flags, desktopConfig);
-  return result.lhr;
+  // const flags = { port: 9222, output: 'json',hostname: '127.0.0.1' , logLevel: 'error'};
+  // const result = await lighthouse(url, flags, desktopConfig);
+  // return result.lhr;
 };
 
 const filterResults = (data: ILighthouseRespose): IDBPayload => {
