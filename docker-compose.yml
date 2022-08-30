@@ -48,6 +48,7 @@ services:
       - PROMETHEUS=http://pushgateway:9091
     volumes:
       - ./config.json:/usr/src/webperf-dashboard-lighthouse/config.json
+      - ./packages/lighthouse:/usr/src/webperf-dashboard-lighthouse
     depends_on:
       - influxdb
       - prometheus
